@@ -1,0 +1,110 @@
+{
+  "products": {
+    "sony wh-1000xm5": {
+      "reviews": [
+        { "source": "Amazon", "rating": 5, "text": "Absolutely the best noise cancelling headphones I have ever used. The ANC is phenomenal and the sound quality is top notch. Battery lasts all day easily." },
+        { "source": "Amazon", "rating": 4, "text": "Great sound quality, very comfortable for long hours. Worth every penny for an audiophile. Battery life is impressive." },
+        { "source": "Amazon", "rating": 3, "text": "Good headphones but the hinge feels fragile. Sound quality is excellent though." },
+        { "source": "Amazon", "rating": 2, "text": "Had connectivity issues with my laptop. Keeps dropping the Bluetooth connection every few minutes. Very frustrating experience." },
+        { "source": "Amazon", "rating": 5, "text": "Perfect for long flights. The noise cancellation blocks out everything. Super comfortable even after 8 hours of continuous use." },
+        { "source": "Flipkart", "rating": 5, "text": "Best headphones in this price range. Call quality is also very clear and crisp. Noise cancellation is outstanding." },
+        { "source": "Flipkart", "rating": 4, "text": "Sound quality is crisp and clear. Noise cancellation works brilliantly in office environments and busy cafes." },
+        { "source": "Flipkart", "rating": 1, "text": "Very disappointed. Ear cups started peeling after 3 months. Poor build quality for such expensive headphones." },
+        { "source": "Flipkart", "rating": 3, "text": "Sound is good but not worth the price for a casual listener. There are cheaper options available." },
+        { "source": "Flipkart", "rating": 5, "text": "Excellent noise cancellation and battery life. Blocks out all traffic noise during daily commute perfectly." },
+        { "source": "Reddit", "rating": 5, "text": "XM5 blew me away. Coming from Bose QC45, the active noise cancellation is on another level. Sound quality is outstanding." },
+        { "source": "Reddit", "rating": 4, "text": "Great headphones overall. No IP rating so cannot use during workouts. For daily commute it is absolutely perfect." },
+        { "source": "Reddit", "rating": 2, "text": "The companion app is buggy on Android. Keeps crashing and resetting EQ settings. Bluetooth connectivity drops sometimes." },
+        { "source": "Reddit", "rating": 5, "text": "Battery life is incredible. Noise cancellation is the best I have ever tested on any headphones." },
+        { "source": "Reddit", "rating": 3, "text": "Sound is amazing but Bluetooth multipoint connectivity can be finicky when switching between devices." },
+        { "source": "Review Blog", "rating": 5, "text": "Top pick for premium headphones. Unmatched noise cancellation, 30-hour battery life, and lush sound quality make this the go-to for professionals and travelers." },
+        { "source": "Review Blog", "rating": 4, "text": "Premium experience for a premium price. Sound quality is absolutely excellent. Hinge build quality could be better." },
+        { "source": "Review Blog", "rating": 5, "text": "After testing over 50 headphones this year, the XM5 remains our editor choice. Active noise cancellation technology is simply unmatched." }
+      ]
+    },
+    "samsung galaxy s24": {
+      "reviews": [
+        { "source": "Amazon", "rating": 5, "text": "Best Android phone I have ever used. Camera quality is incredible especially in low light photography. Battery life lasts a full day." },
+        { "source": "Amazon", "rating": 4, "text": "Great performance, smooth display and fast charging. AI features are actually useful unlike gimmicks on other phones." },
+        { "source": "Amazon", "rating": 3, "text": "Good phone but gets warm under load. Gaming for 30 minutes and it is noticeably hot to touch." },
+        { "source": "Amazon", "rating": 2, "text": "Camera is oversharpened. Photos look artificial and heavily processed. Low light performance is disappointing." },
+        { "source": "Amazon", "rating": 5, "text": "Display quality is stunning. The 120Hz refresh rate makes everything smooth. Camera system is versatile and powerful." },
+        { "source": "Flipkart", "rating": 5, "text": "Flagship experience at its finest. One UI is smooth and blazing fast. Love the premium titanium frame build quality." },
+        { "source": "Flipkart", "rating": 4, "text": "Very good all-rounder. Circle to Search feature is genuinely useful. Build quality feels extremely premium." },
+        { "source": "Flipkart", "rating": 1, "text": "Heating issue is very real. Cannot play games for more than 20 minutes without the phone becoming uncomfortably hot." },
+        { "source": "Flipkart", "rating": 3, "text": "Decent phone but Samsung bloatware is very annoying. Too many pre-installed apps that cannot be removed." },
+        { "source": "Flipkart", "rating": 5, "text": "Camera zoom capabilities are outstanding. Night mode photography produces stunning results. Fast charging is excellent." },
+        { "source": "Reddit", "rating": 5, "text": "Camera zoom capabilities are insane. Travel photography is a completely upgraded experience now with this phone." },
+        { "source": "Reddit", "rating": 3, "text": "Great phone overall but Samsung bloatware is very annoying to deal with. Many pre-installed apps serve no purpose." },
+        { "source": "Reddit", "rating": 4, "text": "Camera quality especially in low light is genuinely impressive and competitive with much more expensive phones." },
+        { "source": "Reddit", "rating": 2, "text": "Thermal throttling is a real problem during extended gaming. The processor slows down significantly to manage heat." },
+        { "source": "Review Blog", "rating": 4, "text": "Samsung Galaxy S24 delivers on almost every front. AI features set it apart but heating under sustained load remains a notable concern." },
+        { "source": "Review Blog", "rating": 5, "text": "Best Samsung phone in years. Improved camera system, cleaner software, and excellent display quality. Our top Android recommendation." }
+      ]
+    },
+    "instant pot duo 7-in-1": {
+      "reviews": [
+        { "source": "Amazon", "rating": 5, "text": "Changed my life completely. I cook meals in 20 minutes that used to take 2 hours. Pressure cooking is a game changer for busy families." },
+        { "source": "Amazon", "rating": 5, "text": "Best kitchen appliance ever. Easy to clean, multiple cooking functions, and very reliable. Using it almost every day." },
+        { "source": "Amazon", "rating": 4, "text": "Great product overall. Slight learning curve at first but cooking becomes incredibly fast and convenient once you understand it." },
+        { "source": "Amazon", "rating": 3, "text": "Decent but the rubber seal starts to smell after a few months. Need to clean it thoroughly to avoid odour between dishes." },
+        { "source": "Amazon", "rating": 2, "text": "Lid locking mechanism broke after 6 months of regular use. Customer service was very slow to respond to my complaint." },
+        { "source": "Amazon", "rating": 5, "text": "Perfect for meal prep. Cook large batches on Sunday and have food ready for the entire week. Slow cook function is excellent too." },
+        { "source": "Flipkart", "rating": 5, "text": "Must have for Indian cooking. Dal, biryani, and curries come out perfect every time. Saves so much time and gas." },
+        { "source": "Flipkart", "rating": 4, "text": "Very good multi-cooker. Build quality is solid and the inner pot is easy to clean. Worth every rupee spent." },
+        { "source": "Flipkart", "rating": 3, "text": "Good but takes up a lot of counter space. If you have a small kitchen you need to plan carefully where to keep it." },
+        { "source": "Flipkart", "rating": 5, "text": "Excellent product. Pressure cooking cuts cooking time dramatically. Made rajma in 25 minutes. Outstanding performance." },
+        { "source": "Reddit", "rating": 4, "text": "Solid appliance with great versatility. The saute function is underrated. Full replacement for both a pot and slow cooker." },
+        { "source": "Reddit", "rating": 3, "text": "Good cooker but the learning curve is steeper than advertised. Took several weeks to understand all the pressure settings." },
+        { "source": "Reddit", "rating": 5, "text": "Life changing kitchen tool. Chicken stock that used to take 8 hours now takes 90 minutes with incredible flavour." },
+        { "source": "Review Blog", "rating": 5, "text": "Instant Pot Duo remains our top pick for home pressure cookers. Versatile, durable, and genuinely time-saving for busy home cooks." },
+        { "source": "Review Blog", "rating": 4, "text": "Essential kitchen appliance for modern households. The 7-in-1 functionality genuinely replaces multiple appliances." }
+      ]
+    },
+    "apple airpods pro 2": {
+      "reviews": [
+        { "source": "Amazon", "rating": 5, "text": "Incredible noise cancellation for such small earbuds. Sound quality is detailed and rich. Battery life with the case lasts me an entire week." },
+        { "source": "Amazon", "rating": 4, "text": "Best earbuds I have ever owned. Transparency mode sounds completely natural. Comfortable fit for hours of continuous listening." },
+        { "source": "Amazon", "rating": 3, "text": "Great sound quality but very expensive. The fit does not work perfectly for everyone. Ears get tired after 2 hours of wearing." },
+        { "source": "Amazon", "rating": 2, "text": "One earbud stopped working after just 4 months. Having to replace them so quickly is unacceptable at this premium price point." },
+        { "source": "Amazon", "rating": 5, "text": "Adaptive audio feature is brilliant. Seamless integration with iPhone and Mac is unmatched by any competitor in the market." },
+        { "source": "Flipkart", "rating": 5, "text": "Outstanding earbuds with premium build quality. Compact case charges wirelessly. Noise cancellation blocks out everything." },
+        { "source": "Flipkart", "rating": 4, "text": "Excellent sound quality and comfortable fit. Touch controls are intuitive and responsive. Battery life is good for daily commuting." },
+        { "source": "Flipkart", "rating": 2, "text": "Way too expensive for the battery life you get. Only 6 hours per charge is disappointing compared to competitors." },
+        { "source": "Reddit", "rating": 5, "text": "Coming from original AirPods Pro the upgrade is massive. Noise cancellation improvement is dramatic. Worth the premium price." },
+        { "source": "Reddit", "rating": 4, "text": "Excellent earbuds but truly great only if you are in the Apple ecosystem. iPhone and Mac integration is seamless." },
+        { "source": "Reddit", "rating": 3, "text": "Sound quality is very good but fit is hit or miss. The ear tips included do not work perfectly for everyone." },
+        { "source": "Review Blog", "rating": 5, "text": "AirPods Pro 2 set the standard for premium wireless earbuds. Best-in-class noise cancellation and seamless Apple integration make them the obvious choice for iPhone users." }
+      ]
+    },
+    "oneplus nord ce 3": {
+      "reviews": [
+        { "source": "Amazon", "rating": 4, "text": "Excellent value for money smartphone. Performance is smooth for daily tasks and the camera produces sharp detailed photos in good lighting." },
+        { "source": "Amazon", "rating": 5, "text": "Best budget phone in this price segment. Fast charging is incredibly quick and battery lasts comfortably through a full day of heavy usage." },
+        { "source": "Amazon", "rating": 3, "text": "Good phone for the price but camera performance in low light is quite disappointing and produces noisy grainy images." },
+        { "source": "Amazon", "rating": 2, "text": "Heating issues during gaming sessions. Phone gets uncomfortably warm after just 20 minutes of playing demanding games." },
+        { "source": "Flipkart", "rating": 5, "text": "Outstanding value smartphone. Smooth performance, excellent fast charging, and clean OxygenOS software. Highly recommended for budget buyers." },
+        { "source": "Flipkart", "rating": 4, "text": "Great mid-range phone with premium feel. Display is bright and vibrant. Battery life with 80W fast charging is a major advantage." },
+        { "source": "Flipkart", "rating": 3, "text": "Decent phone overall but software updates have been slow and inconsistent. OnePlus needs to improve long-term software support." },
+        { "source": "Reddit", "rating": 4, "text": "Solid budget option that punches well above its price. Fast charging from zero to full in under 30 minutes is genuinely impressive." },
+        { "source": "Reddit", "rating": 3, "text": "Camera quality is inconsistent. Great shots in daylight but terrible low light performance makes it unsuitable for evening photography." },
+        { "source": "Review Blog", "rating": 4, "text": "OnePlus Nord CE 3 delivers impressive performance for its competitive price. The 80W fast charging and smooth display make it one of the best value propositions in the mid-range segment." }
+      ]
+    },
+    "lg oled c3 tv": {
+      "reviews": [
+        { "source": "Amazon", "rating": 5, "text": "Most stunning picture quality I have ever seen on any television. The blacks are absolutely perfect and colors are incredibly vibrant. Gaming performance with low input lag is outstanding." },
+        { "source": "Amazon", "rating": 5, "text": "Worth every penny. OLED display makes streaming content look cinematic. HDR content looks absolutely breathtaking on this panel." },
+        { "source": "Amazon", "rating": 4, "text": "Excellent TV with stunning picture quality. Only concern is potential burn-in risk with static content over long time." },
+        { "source": "Amazon", "rating": 3, "text": "Picture quality is amazing but the built-in speakers are quite disappointing and weak. You will definitely need a soundbar." },
+        { "source": "Flipkart", "rating": 5, "text": "Best television I have ever owned. Picture quality during night scenes with deep blacks is absolutely unreal and stunning." },
+        { "source": "Flipkart", "rating": 4, "text": "Outstanding display quality for both movies and gaming. WebOS interface is smooth and responsive. Remote control is sleek." },
+        { "source": "Flipkart", "rating": 2, "text": "Burn-in appeared on my unit after 8 months of normal use. This is a serious concern for the asking price of this television." },
+        { "source": "Reddit", "rating": 5, "text": "Gaming on this TV is a transformative experience. The 120Hz panel with 1ms response time and VRR support makes every game look incredible." },
+        { "source": "Reddit", "rating": 4, "text": "Gorgeous picture quality that you cannot find in any LED TV. The perfect blacks make night scenes look completely cinematic." },
+        { "source": "Reddit", "rating": 3, "text": "Great TV but burn-in risk is real and worth considering if you watch news or sports channels with static logos." },
+        { "source": "Review Blog", "rating": 5, "text": "LG C3 OLED is our unanimous pick for the best TV of the year. Unrivaled picture quality, excellent gaming features, and refined smart TV platform make it worth every penny." }
+      ]
+    }
+  }
+}
