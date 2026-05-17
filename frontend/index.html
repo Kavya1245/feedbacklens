@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FeedbackLens — AI Product Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── RESET & TOKENS ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #111118;
+      --border:    #1e1e2e;
+      --accent:    #e8ff47;
+      --accent2:   #47ffe8;
+      --accent3:   #ff6b6b;
+      --text:      #f0f0f8;
+      --muted:     #6b6b88;
+      --pos:       #47ff8a;
+      --neg:       #ff5f5f;
+      --neu:       #ffc947;
+      --card-bg:   #13131c;
+      --radius:    16px;
+      --glow:      0 0 40px rgba(232,255,71,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── AMBIENT GLOW BLOBS ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.12;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; animation: drift 20s ease-in-out infinite alternate; }
+    .blob-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; right: -150px; animation: drift 25s ease-in-out infinite alternate-reverse; }
+    .blob-3 { width: 300px; height: 300px; background: var(--accent3); top: 50%; left: 50%; transform: translate(-50%,-50%); animation: drift 18s ease-in-out infinite alternate; }
+
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.05); }
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      margin-bottom: 64px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      line-height: 1.6;
+    }
+
+    /* ── SEARCH BOX ── */
+    .search-section {
+      margin-bottom: 56px;
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+
+    .search-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .search-input {
+      flex: 1;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input::placeholder { color: var(--muted); }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232,255,71,0.1);
+    }
+
+    .search-btn {
+      background: var(--accent);
+      color: #0a0a0f;
+      border: none;
+      border-radius: var(--radius);
+      padding: 18px 32px;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,255,71,0.25); }
+    .search-btn:active { transform: translateY(0); }
+    .search-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .sample-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .pill {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      background: transparent;
+    }
+
+    .pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── LOADING STATE ── */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 80px 0;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .loading.active { display: block; }
+
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .loading-steps {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .loading-step {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--border);
+      transition: color 0.4s;
+    }
+
+    .loading-step.done { color: var(--pos); }
+    .loading-step.active { color: var(--accent); }
+
+    /* ── ERROR STATE ── */
+    .error-box {
+      display: none;
+      background: rgba(255,95,95,0.08);
+      border: 1px solid rgba(255,95,95,0.25);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--neg);
+    }
+
+    .error-box.active { display: block; }
+
+    /* ── RESULT CARD ── */
+    .result { display: none; animation: fadeUp 0.6s ease both; }
+    .result.active { display: block; }
+
+    /* Product Header */
+    .product-header {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .product-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .review-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .review-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* Sentiment Bar */
+    .sentiment-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .sentiment-bar-wrap {
+      margin-bottom: 16px;
+    }
+
+    .sentiment-bar {
+      height: 10px;
+      border-radius: 100px;
+      background: var(--border);
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .bar-pos { background: var(--pos); transition: width 1s ease; }
+    .bar-neu { background: var(--neu); transition: width 1s ease 0.2s; }
+    .bar-neg { background: var(--neg); transition: width 1s ease 0.4s; }
+
+    .sentiment-legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .overall-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(71, 255, 138, 0.1);
+      border: 1px solid rgba(71, 255, 138, 0.25);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--pos);
+      margin-top: 16px;
+    }
+
+    .overall-badge.negative {
+      background: rgba(255,95,95,0.1);
+      border-color: rgba(255,95,95,0.25);
+      color: var(--neg);
+    }
+
+    .overall-badge.mixed {
+      background: rgba(255,201,71,0.1);
+      border-color: rgba(255,201,71,0.25);
+      color: var(--neu);
+    }
+
+    /* Two column grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* Pros / Cons */
+    .pros-cons-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .pros-cons-card.pros { border-top: 2px solid var(--pos); }
+    .pros-cons-card.cons { border-top: 2px solid var(--neg); }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-weight: 500;
+    }
+
+    .tag.pro  { background: rgba(71,255,138,0.1); color: var(--pos); border: 1px solid rgba(71,255,138,0.2); }
+    .tag.con  { background: rgba(255,95,95,0.1); color: var(--neg); border: 1px solid rgba(255,95,95,0.2); }
+
+    /* Buy / Avoid */
+    .buy-avoid-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+
+    .buy-avoid-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 600px) { .buy-avoid-grid { grid-template-columns: 1fr; } }
+
+    .buy-block, .avoid-block {
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .buy-block  { background: rgba(71,255,138,0.06); border: 1px solid rgba(71,255,138,0.15); }
+    .avoid-block { background: rgba(255,95,95,0.06); border: 1px solid rgba(255,95,95,0.15); }
+
+    .buy-label, .avoid-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .buy-label  { color: var(--pos); }
+    .avoid-label { color: var(--neg); }
+
+    .buy-text, .avoid-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    /* Verdict */
+    .verdict-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .verdict-card::after {
+      content: '"';
+      position: absolute;
+      right: 24px;
+      top: 16px;
+      font-family: 'Instrument Serif', serif;
+      font-size: 120px;
+      color: var(--border);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .verdict-text {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      line-height: 1.65;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+      max-width: 90%;
+    }
+
+    /* Source Breakdown */
+    .sources-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+    }
+
+    .source-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .source-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .source-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .source-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .source-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-weight: 500;
+    }
+
+    .source-badge.positive { background: rgba(71,255,138,0.1); color: var(--pos); }
+    .source-badge.negative { background: rgba(255,95,95,0.1); color: var(--neg); }
+    .source-badge.mixed    { background: rgba(255,201,71,0.1); color: var(--neu); }
+
+    /* Source icon dots */
+    .source-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent2);
+      opacity: 0.7;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      margin-top: 80px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--border);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="wrapper">
+
+    <!-- Header -->
+    <header>
+      <div class="logo-row">
+        <div class="logo-icon">🔍</div>
+        <span class="logo-text">FeedbackLens</span>
+      </div>
+      <h1>What do <em>real buyers</em><br>actually think?</h1>
+      <p class="subtitle">// AI-synthesized insights from Amazon · Flipkart · Reddit · Review Blogs</p>
+    </header>
+
+    <!-- Search -->
+    <section class="search-section">
+      <span class="search-label">Enter a product name</span>
+      <div class="search-box">
+        <input
+          type="text"
+          class="search-input"
+          id="productInput"
+          placeholder="e.g. Sony WH-1000XM5, Samsung Galaxy S24..."
+          autocomplete="off"
+        />
+        <button class="search-btn" id="analyzeBtn" onclick="analyze()">
+          ANALYZE →
+        </button>
+      </div>
+      <div class="sample-pills">
+        <span class="pill" onclick="quickSearch('Sony WH-1000XM5')">Sony WH-1000XM5</span>
+        <span class="pill" onclick="quickSearch('Samsung Galaxy S24')">Samsung Galaxy S24</span>
+        <span class="pill" onclick="quickSearch('Instant Pot Duo 7-in-1')">Instant Pot Duo</span>
+        <span class="pill" onclick="quickSearch('Apple AirPods Pro 2')">AirPods Pro 2</span>
+        <span class="pill" onclick="quickSearch('OnePlus Nord CE 3')">OnePlus Nord CE 3</span>
+        <span class="pill" onclick="quickSearch('LG OLED C3 TV')">LG OLED C3 TV</span>
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Synthesizing reviews...</div>
+      <div class="loading-steps">
+        <div class="loading-step" id="step1">▸ Fetching reviews from multiple sources</div>
+        <div class="loading-step" id="step2">▸ Running sentiment analysis</div>
+        <div class="loading-step" id="step3">▸ Generating buyer insights</div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-box" id="errorBox"></div>
+
+    <!-- Result -->
+    <div class="result" id="result">
+
+      <!-- Product Header -->
+      <div class="product-header">
+        <div class="product-name" id="resProduct"></div>
+        <div class="review-meta">
+          <span>📊 <span id="resTotalReviews"></span> reviews analyzed</span>
+          <span>🗂 Multi-source aggregation</span>
+        </div>
+      </div>
+
+      <!-- Sentiment -->
+      <div class="sentiment-section">
+        <div class="section-label">Sentiment Breakdown</div>
+        <div class="sentiment-bar-wrap">
+          <div class="sentiment-bar">
+            <div class="bar-pos" id="barPos" style="width:0%"></div>
+            <div class="bar-neu" id="barNeu" style="width:0%"></div>
+            <div class="bar-neg" id="barNeg" style="width:0%"></div>
+          </div>
+          <div class="sentiment-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--pos)"></div><span id="posLabel">Positive</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--neu)"></div><span id="neuLabel">Neutral</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--neg)"></div><span id="negLabel">Negative</span></div>
+          </div>
+        </div>
+        <div class="overall-badge" id="overallBadge">
+          <span>●</span> <span id="overallText"></span>
+        </div>
+      </div>
+
+      <!-- Pros & Cons -->
+      <div class="grid-2">
+        <div class="pros-cons-card pros">
+          <div class="section-label">✦ What buyers love</div>
+          <div class="tag-list" id="prosList"></div>
+        </div>
+        <div class="pros-cons-card cons">
+          <div class="section-label">✦ Common complaints</div>
+          <div class="tag-list" id="consList"></div>
+        </div>
+      </div>
+
+      <!-- Buy / Avoid -->
+      <div class="buy-avoid-card">
+        <div class="section-label">Buyer Recommendation</div>
+        <div class="buy-avoid-grid">
+          <div class="buy-block">
+            <div class="buy-label">✓ Buy if</div>
+            <div class="buy-text" id="resBuyIf"></div>
+          </div>
+          <div class="avoid-block">
+            <div class="avoid-label">✗ Avoid if</div>
+            <div class="avoid-text" id="resAvoidIf"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verdict -->
+      <div class="verdict-card">
+        <div class="section-label">Final Verdict</div>
+        <div class="verdict-text" id="resVerdict"></div>
+      </div>
+
+      <!-- Sources -->
+      <div class="sources-card">
+        <div class="section-label">Source Breakdown</div>
+        <div class="source-list" id="sourceList"></div>
+      </div>
+
+    </div>
+
+    <footer>FEEDBACKLENS · VIBEATHON 2.0 · AI-POWERED REVIEW INTELLIGENCE</footer>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8000/api/analyze';
+
+    function quickSearch(name) {
+      document.getElementById('productInput').value = name;
+      analyze();
+    }
+
+    function setLoadingStep(n) {
+      ['step1','step2','step3'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        el.className = 'loading-step' + (i < n ? ' done' : i === n ? ' active' : '');
+      });
+    }
+
+    async function analyze() {
+      const input = document.getElementById('productInput');
+      const product = input.value.trim();
+      if (!product) { input.focus(); return; }
+
+      // Reset UI
+      document.getElementById('result').classList.remove('active');
+      document.getElementById('errorBox').classList.remove('active');
+      document.getElementById('loading').classList.add('active');
+      document.getElementById('analyzeBtn').disabled = true;
+      setLoadingStep(0);
+
+      // Animate loading steps
+      setTimeout(() => setLoadingStep(1), 600);
+      setTimeout(() => setLoadingStep(2), 1400);
+
+      try {
+        const res = await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product_name: product })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ detail: 'Unknown error' }));
+          throw new Error(err.detail || `Error ${res.status}`);
+        }
+
+        const data = await res.json();
+        setLoadingStep(3);
+        setTimeout(() => renderResult(data), 400);
+
+      } catch (e) {
+        document.getElementById('loading').classList.remove('active');
+        const eb = document.getElementById('errorBox');
+        eb.textContent = '⚠ ' + (e.message || 'Could not connect to backend. Make sure uvicorn is running on port 8000.');
+        eb.classList.add('active');
+      } finally {
+        document.getElementById('analyzeBtn').disabled = false;
+      }
+    }
+
+    function renderResult(d) {
+      document.getElementById('loading').classList.remove('active');
+
+      // Product name
+      document.getElementById('resProduct').textContent = d.product;
+      document.getElementById('resTotalReviews').textContent = d.total_reviews;
+
+      // Sentiment bar
+      const s = d.sentiment_score;
+      setTimeout(() => {
+        document.getElementById('barPos').style.width = s.positive + '%';
+        document.getElementById('barNeu').style.width = s.neutral + '%';
+        document.getElementById('barNeg').style.width = s.negative + '%';
+      }, 100);
+
+      document.getElementById('posLabel').textContent = `Positive ${s.positive}%`;
+      document.getElementById('neuLabel').textContent = `Neutral ${s.neutral}%`;
+      document.getElementById('negLabel').textContent = `Negative ${s.negative}%`;
+
+      // Overall badge
+      const badge = document.getElementById('overallBadge');
+      document.getElementById('overallText').textContent = d.overall_sentiment;
+      badge.className = 'overall-badge';
+      if (d.overall_sentiment.toLowerCase().includes('negative')) badge.classList.add('negative');
+      else if (d.overall_sentiment.toLowerCase().includes('mixed')) badge.classList.add('mixed');
+
+      // Pros
+      const prosList = document.getElementById('prosList');
+      prosList.innerHTML = (d.top_pros || []).map(p =>
+        `<span class="tag pro">${p}</span>`
+      ).join('');
+
+      // Cons
+      const consList = document.getElementById('consList');
+      consList.innerHTML = (d.top_cons || []).map(c =>
+        `<span class="tag con">${c}</span>`
+      ).join('');
+
+      // Buy / Avoid / Verdict
+      document.getElementById('resBuyIf').textContent = d.buy_if;
+      document.getElementById('resAvoidIf').textContent = d.avoid_if;
+      document.getElementById('resVerdict').textContent = d.verdict;
+
+      // Sources
+      const sourceList = document.getElementById('sourceList');
+      sourceList.innerHTML = (d.source_summary || []).map(s => {
+        const badgeClass = s.sentiment.toLowerCase().includes('positive') ? 'positive'
+                         : s.sentiment.toLowerCase().includes('negative') ? 'negative' : 'mixed';
+        return `
+          <div class="source-row">
+            <div class="source-name">
+              <div class="source-dot"></div>
+              ${s.source}
+              <span class="source-count">(${s.review_count} reviews)</span>
+            </div>
+            <span class="source-badge ${badgeClass}">${s.sentiment}</span>
+          </div>`;
+      }).join('');
+
+      document.getElementById('result').classList.add('active');
+    }
+
+    // Enter key support
+    document.getElementById('productInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') analyze();
+    });
+  </script>
+</body>
+</html>
